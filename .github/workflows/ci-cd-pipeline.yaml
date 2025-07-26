@@ -1,0 +1,26 @@
+name: Lugx Gaming CI/CD
+
+on:
+  push:
+    branches: [ "main" ] # This pipeline runs on pushes to the main branch
+
+jobs:
+  build_services:
+    runs-on: ubuntu-latest # The job runs on a fresh virtual machine hosted by GitHub
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Game Service
+        run: docker build -t my-docker-username/game-service:${{ github.sha }} ./game-service
+        # Replace 'my-docker-username' with your Docker Hub username
+
+      - name: Build Order Service
+        run: docker build -t my-docker-username/order-service:${{ github.sha }} ./order-service
+        # Replace 'my-docker-username' with your Docker Hub username
+
+      # Add similar build steps for your other services (frontend, analytics)

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lugx-gaming-frontend-deployment
+spec:
+  replicas: 2 # Runs two copies for availability
+  selector:
+    matchLabels:
+      app: lugx-gaming-frontend
+  template:
+    metadata:
+      labels:
+        app: lugx-gaming-frontend
+    spec:
+      containers:
+      - name: lugx-gaming-frontend
+        image: lugx-gaming-frontend:latest # Use the image you just built
+        imagePullPolicy: IfNotPresent # Important for using local images
+        ports:
+        - containerPort: 80 # The port your Nginx server runs on
