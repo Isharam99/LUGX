@@ -1,2 +1,3 @@
 Flask
 clickhouse-driver
+Flask-Cors

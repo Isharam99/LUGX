@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 from clickhouse_driver import Client
+from flask_cors import CORS 
 
 app = Flask(__name__)
 
