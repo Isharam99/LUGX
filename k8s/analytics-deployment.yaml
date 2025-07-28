@@ -14,7 +14,12 @@ spec:
     spec:
       containers:
       - name: analytics-service
-        image: analytics-service:latest
-        imagePullPolicy: IfNotPresent
+        image: ishdocker99/analytics-service:v7
+        imagePullPolicy: Always
+        env: # <-- Add this section
+        - name: CLICKHOUSE_HOST
+          value: "10.108.208.118" # <-- Use the CLUSTER-IP you found
+        - name: CLICKHOUSE_PASSWORD
+          value: "password123"
         ports:
         - containerPort: 5002

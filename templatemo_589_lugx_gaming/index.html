@@ -410,6 +410,32 @@ https://templatemo.com/tm-589-lugx-gaming
   </footer>
 
   <!-- Scripts -->
+   <script>
+  // Function to send a tracking event
+  function trackEvent(eventType, pageUrl) {
+    // IMPORTANT: Replace XXXXX with the NodePort you found in Step 1
+    const analyticsUrl = 'http://localhost:30965/track';
+
+    fetch(analyticsUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        event_type: eventType,
+        page_url: pageUrl
+      }),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Analytics success:', data))
+    .catch((error) => console.error('Analytics error:', error));
+  }
+
+  // Send a 'pageview' event when the page loads
+  window.onload = () => {
+    trackEvent('pageview', window.location.pathname);
+  };
+</script>
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
