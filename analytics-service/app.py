@@ -18,7 +18,7 @@ def initialize_schema(client):
     client.execute('CREATE DATABASE IF NOT EXISTS analytics_db')
     client.execute('''
         CREATE TABLE IF NOT EXISTS analytics_db.events (
-            event_time DateTime,
+            event_time DateTime DEFAULT now(),
             event_type String,
             page_url String
         ) ENGINE = MergeTree()
@@ -37,9 +37,10 @@ def track_event():
         # Ensure DB and table exist before trying to insert
         initialize_schema(client)
         
+        # Let ClickHouse handle the timestamp automatically
         client.execute(
-            'INSERT INTO analytics_db.events (event_type, page_url, event_time) VALUES',
-            [(data['event_type'], data['page_url'], 'now()')]
+            'INSERT INTO analytics_db.events (event_type, page_url) VALUES',
+            [(data['event_type'], data['page_url'])]
         )
         return jsonify({"status": "success"}), 200
     except Exception as e:

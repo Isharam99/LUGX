@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: analytics-service
-        image: ishdocker99/analytics-service:latest
+        image: ishdocker99/analytics-service:v7
         imagePullPolicy: Always
         env: # <-- Add this section
         - name: CLICKHOUSE_HOST
