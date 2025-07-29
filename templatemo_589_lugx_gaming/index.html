@@ -410,20 +410,21 @@ https://templatemo.com/tm-589-lugx-gaming
   </footer>
 
   <!-- Scripts -->
-   <script>
-  // Function to send a tracking event
-  function trackEvent(eventType, pageUrl) {
-    // IMPORTANT: Replace XXXXX with the NodePort you found in Step 1
-    const analyticsUrl = 'http://localhost:30965/track';
+<script>
+  // --- Analytics Tracking Script ---
 
+  // IMPORTANT: Replace XXXXX with the NodePort for your analytics-service
+  const analyticsUrl = 'http://localhost:30965/track';
+
+  // Function to send a tracking event
+  function trackEvent(eventType, pageUrl, details = '') {
     fetch(analyticsUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         event_type: eventType,
-        page_url: pageUrl
+        page_url: pageUrl,
+        details: details
       }),
     })
     .then(response => response.json())
@@ -431,10 +432,29 @@ https://templatemo.com/tm-589-lugx-gaming
     .catch((error) => console.error('Analytics error:', error));
   }
 
-  // Send a 'pageview' event when the page loads
-  window.onload = () => {
+  // 1. Track Page View on load
+  window.addEventListener('load', () => {
     trackEvent('pageview', window.location.pathname);
-  };
+  });
+
+  // 2. Track Clicks on all buttons and links
+  document.addEventListener('click', (event) => {
+    const target = event.target.closest('a, button');
+    if (target) {
+      const details = `Clicked on element: ${target.tagName}, Text: ${target.innerText.substring(0, 50)}`;
+      trackEvent('click', window.location.pathname, details);
+    }
+  });
+
+  // 3. Track Scroll Depth
+  let scrollDepthTracked = false;
+  window.addEventListener('scroll', () => {
+    const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    if (scrollPercentage > 50 && !scrollDepthTracked) {
+      trackEvent('scroll_depth', window.location.pathname, 'Scrolled past 50%');
+      scrollDepthTracked = true; // Ensure we only send this event once
+    }
+  });
 </script>
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
